@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hangman Game</title>
+</head>
+<body>
+    <h1>Congratulations! You guessed the word: {{ word }}</h1>
+    <a href="{{ url_for('index', reset='true') }}">Play Again</a>
+</body>
+</html>
