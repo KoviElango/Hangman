@@ -3,14 +3,15 @@ from hangman import HangmanGame, get_country
 from countries_data import countries
 
 app = Flask(__name__)
-app.secret_key = 'kira'
+app.secret_key = 'Kovi'  # Replace with your own secret key
+
 @app.route('/')
 def index():
     if 'word' not in session or request.args.get('reset'):
         word = get_country(countries)
         session['word'] = word
         session['guessed_letters'] = []
-        session['lives'] = 10
+        session['lives'] = 10  # Change the number of lives here
         session['used_letters'] = []
     
     word = session['word']
@@ -18,9 +19,10 @@ def index():
     lives = session['lives']
     used_letters = set(session['used_letters'])
 
-    game = HangmanGame(word, lives)
+    game = HangmanGame(word, max_lives=lives)  # Ensure max_lives is passed correctly
     game.guessed_letters = guessed_letters
     game.used_letters = used_letters
+    game.lives = lives
 
     return render_template('index.html', game=game, word=word, guessed_letters=guessed_letters, lives=lives, used_letters=used_letters)
 
@@ -32,9 +34,10 @@ def guess():
     lives = session['lives']
     used_letters = set(session['used_letters'])
 
-    game = HangmanGame(word, lives)
+    game = HangmanGame(word, max_lives=lives)  # Ensure max_lives is passed correctly
     game.guessed_letters = guessed_letters
     game.used_letters = used_letters
+    game.lives = lives
 
     game.guess(letter)
     

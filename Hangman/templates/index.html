@@ -3,16 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>Hangman Game</title>
+    <style>
+        .letter-box {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 1px solid #000;
+            margin: 2px;
+            text-align: center;
+            line-height: 30px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .correct-letter {
+            background-color: lightgreen;
+            cursor: not-allowed;
+        }
+        .incorrect-letter {
+            background-color: lightcoral;
+            cursor: not-allowed;
+        }
+        .unused-letter {
+            background-color: white;
+        }
+        .letter-form {
+            display: inline;
+        }
+    </style>
 </head>
 <body>
     <h1>Welcome to Hangman!</h1>
     <p>Current progress: {{ game.display_progress() }}</p>
-    <p>Lives left: {{ lives }}</p>
-    <p>Used letters: {{ ' '.join(used_letters) }}</p>
-    <form action="{{ url_for('guess') }}" method="post">
-        <label for="letter">Guess a letter: </label>
-        <input type="text" id="letter" name="letter" maxlength="1" required>
-        <button type="submit">Guess</button>
-    </form>
+    <p>Lives: {{ game.display_lives() }}</p>
+    <p>Used letters: </p>
+    {% for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
+        <form class="letter-form" action="{{ url_for('guess') }}" method="post">
+            <input type="hidden" name="letter" value="{{ letter }}">
+            <button type="submit" class="letter-box 
+                {% if letter in used_letters and letter in word %}correct-letter
+                {% elif letter in used_letters and letter not in word %}incorrect-letter
+                {% else %}unused-letter{% endif %}" 
+                {% if letter in used_letters %}disabled{% endif %}>
+                {{ letter }}
+            </button>
+        </form>
+    {% endfor %}
 </body>
 </html>
